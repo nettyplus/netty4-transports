@@ -1,5 +1,6 @@
 package io.github.nettyplus.netty4.transports;
 
+import io.netty.channel.IoHandler;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.uring.IoUring;
 import java.util.Set;
@@ -44,5 +45,13 @@ public class NettyTransportTest {
     public void macTransports() {
         assertEquals(Set.of(NettyTransport.NIO),
                 NettyTransport.availableTransports().collect(Collectors.toSet()));
+    }
+    @Test
+    public void testCreateIoHandlerFactory() {
+        for (NettyTransport transport : NettyTransport.availableTransports().toList()) {
+            IoHandler handler = transport.createIoHandlerFactory().newHandler();
+            handler.prepareToDestroy();
+            handler.destroy();
+        }
     }
 }
