@@ -5,9 +5,12 @@ import io.netty.channel.epoll.Epoll;
 import io.netty.channel.uring.IoUring;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -46,12 +49,16 @@ public class NettyTransportTest {
         assertEquals(Set.of(NettyTransport.NIO),
                 NettyTransport.availableTransports().collect(Collectors.toSet()));
     }
-    @Test
-    public void testCreateIoHandlerFactory() {
-        for (NettyTransport transport : NettyTransport.availableTransports().toList()) {
-            IoHandler handler = transport.createIoHandlerFactory().newHandler();
-            handler.prepareToDestroy();
-            handler.destroy();
-        }
+
+    public static Stream<NettyTransport> availableTransports() {
+        return NettyTransport.availableTransports();
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "availableTransports")
+    public void testCreateIoHandlerFactory(final NettyTransport transport) {
+        IoHandler handler = transport.createIoHandlerFactory().newHandler();
+        handler.prepareToDestroy();
+        handler.destroy();
     }
 }
