@@ -15,27 +15,27 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public enum NettyTransport {
-    NIO(() -> true, NioIoHandler::newFactory, NioServerSocketChannel.class),
-    EPOLL(Epoll::isAvailable, EpollIoHandler::newFactory, EpollServerSocketChannel.class),
-    IO_URING(IoUring::isAvailable, IoUringIoHandler::newFactory, IoUringServerSocketChannel.class);
+    NIO(true, NioIoHandler::newFactory, NioServerSocketChannel.class),
+    EPOLL(Epoll.isAvailable(), EpollIoHandler::newFactory, EpollServerSocketChannel.class),
+    IO_URING(IoUring.isAvailable(), IoUringIoHandler::newFactory, IoUringServerSocketChannel.class);
     /*
-    KQUEUE(KQueue::isAvailable, KQueueIoHandler::newFactory, KQueueServerSocketChannel.class);
+    KQUEUE(KQueue.isAvailable(), KQueueIoHandler::newFactory, KQueueServerSocketChannel.class);
      */
 
     private static final NettyTransport[] ALL_VALUES = values();
 
-    private final Supplier<Boolean> isAvailableSupplier;
+    private final boolean available;
     private final Supplier<IoHandlerFactory> ioHandlerFactorySupplier;
     private final Class<? extends ServerSocketChannel> serverSocketChannelClass;
 
-    NettyTransport(Supplier<Boolean> isAvailable, Supplier<IoHandlerFactory> ioHandlerFactory, Class<? extends ServerSocketChannel> serverSocketClass) {
-        this.isAvailableSupplier = isAvailable;
+    NettyTransport(boolean available, Supplier<IoHandlerFactory> ioHandlerFactory, Class<? extends ServerSocketChannel> serverSocketClass) {
+        this.available = available;
         this.ioHandlerFactorySupplier= ioHandlerFactory;
         this.serverSocketChannelClass = serverSocketClass;
     }
 
     public boolean isAvailable() {
-        return isAvailableSupplier.get();
+        return available;
     }
 
     public Class<? extends ServerSocketChannel> getServerSocketChannelClass() {
