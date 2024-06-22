@@ -10,9 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -50,15 +52,16 @@ public class NettyTransportTest {
                 NettyTransport.availableTransports().collect(Collectors.toSet()));
     }
 
-    public static Stream<NettyTransport> availableTransports() {
-        return NettyTransport.availableTransports();
-    }
-
     @ParameterizedTest
-    @MethodSource(value = "availableTransports")
-    public void testCreateIoHandlerFactory(final NettyTransport transport) {
-        IoHandler handler = transport.createIoHandlerFactory().newHandler();
-        handler.prepareToDestroy();
-        handler.destroy();
+    @EnumSource(NettyTransport.class)
+    public void checkTransport(final NettyTransport transport) {
+        assertNotNull(transport.getDatagramChannelClass());
+        assertNotNull(transport.getServerSocketChannelClass());
+        assertNotNull(transport.getSocketChannelClass());
+        if (transport.isAvailable()) {
+            IoHandler handler = transport.createIoHandlerFactory().newHandler();
+            handler.prepareToDestroy();
+            handler.destroy();
+        }
     }
 }
