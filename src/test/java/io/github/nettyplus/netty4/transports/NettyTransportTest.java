@@ -13,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,15 +42,20 @@ public class NettyTransportTest {
     @Test
     @EnabledOnOs(value = { OS.LINUX } )
     public void linuxTransports() {
-        assertEquals(Set.of(NettyTransport.NIO, NettyTransport.IO_URING, NettyTransport.EPOLL),
-                NettyTransport.availableTransports().collect(Collectors.toSet()));
+        assertThat(NettyTransport.availableTransports())
+            .containsExactlyInAnyOrder(
+                NettyTransport.NIO,
+                NettyTransport.IO_URING,
+                NettyTransport.EPOLL);
     }
 
     @Test
     @EnabledOnOs(value = { OS.MAC } )
     public void macTransports() {
-        assertEquals(Set.of(NettyTransport.NIO),
-                NettyTransport.availableTransports().collect(Collectors.toSet()));
+        assertThat(NettyTransport.availableTransports())
+            .containsExactlyInAnyOrder(
+                NettyTransport.NIO
+                /* todo NettyTransport.KQUEUE */);
     }
 
     @ParameterizedTest
