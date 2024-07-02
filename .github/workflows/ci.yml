@@ -30,7 +30,7 @@ jobs:
     - name: ulimit
       if: runner.os == 'Linux'
       run: ulimit -l
-    - name: Build
+    - name: Build with ulimit
       if: runner.os == 'Linux'
       run: sudo -E bash -c "ulimit -l 65536 && ulimit -a && $MAVEN_COMMAND"
     - name: Build
