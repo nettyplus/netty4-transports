@@ -9,6 +9,9 @@ on:
     branches:
       - main
 
+env:
+  MAVEN_COMMAND: mvn --update-snapshots --no-transfer-progress -B clean test
+
 jobs:
   build:
     strategy:
@@ -25,6 +28,11 @@ jobs:
         distribution: 'zulu'
         cache: 'maven'
     - name: ulimit
+      if: runner.os == 'Linux'
       run: ulimit -l
     - name: Build
-      run: sudo -E bash -c "ulimit -l 65536 && ulimit -a && mvn --update-snapshots --no-transfer-progress -B clean test"
+      if: runner.os == 'Linux'
+      run: sudo -E bash -c "ulimit -l 65536 && ulimit -a && $MAVEN_COMMAND"
+    - name: Build
+      if: runner.os != 'Linux'
+      run: $MAVEN_COMMAND
