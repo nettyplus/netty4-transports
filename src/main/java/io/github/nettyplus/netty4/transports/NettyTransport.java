@@ -26,7 +26,7 @@ public enum NettyTransport {
     NIO(true, NioIoHandler::newFactory, NioServerSocketChannel.class, NioSocketChannel.class, NioDatagramChannel.class),
     EPOLL(Epoll.isAvailable(), EpollIoHandler::newFactory, EpollServerSocketChannel.class, EpollSocketChannel.class, EpollDatagramChannel.class),
     IO_URING(IoUring.isAvailable(), IoUringIoHandler::newFactory, IoUringServerSocketChannel.class, IoUringSocketChannel.class, IoUringDatagramChannel.class);
-    /*
+    /* TODO uncomment this line after Netty 4.2.0 Alpha 2 is released
     KQUEUE(KQueue.isAvailable(), KQueueIoHandler::newFactory, KQueueServerSocketChannel.class);
      */
 
