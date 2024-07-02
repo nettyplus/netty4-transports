@@ -19,8 +19,9 @@ import io.netty.channel.uring.IoUringServerSocketChannel;
 import io.netty.channel.uring.IoUringSocketChannel;
 import io.netty.channel.uring.IoUringDatagramChannel;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public enum NettyTransport {
     NIO(true, NioIoHandler::newFactory, NioServerSocketChannel.class, NioSocketChannel.class, NioDatagramChannel.class),
@@ -30,7 +31,9 @@ public enum NettyTransport {
     KQUEUE(KQueue.isAvailable(), KQueueIoHandler::newFactory, KQueueServerSocketChannel.class);
      */
 
-    private static final NettyTransport[] ALL_VALUES = values();
+    private static final Collection<NettyTransport> AVAILABLE = Arrays.stream(values())
+        .filter(t -> t.isAvailable())
+        .collect(Collectors.toList());
 
     private final boolean available;
     private final Supplier<IoHandlerFactory> ioHandlerFactorySupplier;
@@ -70,8 +73,7 @@ public enum NettyTransport {
         return this.ioHandlerFactorySupplier.get();
     }
 
-    public static Stream<NettyTransport> availableTransports() {
-        return Arrays.stream(ALL_VALUES)
-                .filter(NettyTransport::isAvailable);
+    public static Collection<NettyTransport> availableTransports() {
+        return AVAILABLE;
     }
 }
