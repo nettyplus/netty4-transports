@@ -6,6 +6,10 @@ import io.netty.channel.epoll.EpollDatagramChannel;
 import io.netty.channel.epoll.EpollIoHandler;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.epoll.EpollSocketChannel;
+import io.netty.channel.kqueue.KQueueDatagramChannel;
+import io.netty.channel.kqueue.KQueueIoHandler;
+import io.netty.channel.kqueue.KQueueServerSocketChannel;
+import io.netty.channel.kqueue.KQueueSocketChannel;
 import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.ServerSocketChannel;
@@ -13,6 +17,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.channel.kqueue.KQueue;
 import io.netty.channel.uring.IoUring;
 import io.netty.channel.uring.IoUringIoHandler;
 import io.netty.channel.uring.IoUringServerSocketChannel;
@@ -26,10 +31,8 @@ import java.util.stream.Collectors;
 public enum NettyTransport {
     NIO(true, NioIoHandler::newFactory, NioServerSocketChannel.class, NioSocketChannel.class, NioDatagramChannel.class),
     EPOLL(Epoll.isAvailable(), EpollIoHandler::newFactory, EpollServerSocketChannel.class, EpollSocketChannel.class, EpollDatagramChannel.class),
-    IO_URING(IoUring.isAvailable(), IoUringIoHandler::newFactory, IoUringServerSocketChannel.class, IoUringSocketChannel.class, IoUringDatagramChannel.class);
-    /* TODO uncomment this line after Netty 4.2.0 Alpha 2 is released
-    KQUEUE(KQueue.isAvailable(), KQueueIoHandler::newFactory, KQueueServerSocketChannel.class);
-     */
+    IO_URING(IoUring.isAvailable(), IoUringIoHandler::newFactory, IoUringServerSocketChannel.class, IoUringSocketChannel.class, IoUringDatagramChannel.class),
+    KQUEUE(KQueue.isAvailable(), KQueueIoHandler::newFactory, KQueueServerSocketChannel.class, KQueueSocketChannel.class, KQueueDatagramChannel.class);
 
     private static final Collection<NettyTransport> AVAILABLE = Arrays.stream(values())
         .filter(t -> t.isAvailable())

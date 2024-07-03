@@ -56,8 +56,8 @@ public class NettyTransportTest {
     public void macTransports() {
         assertThat(NettyTransport.availableTransports())
             .containsExactlyInAnyOrder(
-                NettyTransport.NIO
-                /* todo NettyTransport.KQUEUE */);
+                NettyTransport.NIO,
+                NettyTransport.KQUEUE);
     }
 
     @ParameterizedTest
