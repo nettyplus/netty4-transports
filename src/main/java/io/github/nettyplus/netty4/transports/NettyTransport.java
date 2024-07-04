@@ -35,7 +35,7 @@ public enum NettyTransport {
     KQUEUE(KQueue.isAvailable(), KQueueIoHandler::newFactory, KQueueServerSocketChannel.class, KQueueSocketChannel.class, KQueueDatagramChannel.class);
 
     private static final Collection<NettyTransport> AVAILABLE = Arrays.stream(values())
-        .filter(t -> t.isAvailable())
+        .filter(NettyTransport::isAvailable)
         .collect(Collectors.toList());
 
     private final boolean available;
