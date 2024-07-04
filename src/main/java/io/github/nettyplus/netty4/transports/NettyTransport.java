@@ -36,7 +36,7 @@ public enum NettyTransport {
 
     private static final Collection<NettyTransport> AVAILABLE = Arrays.stream(values())
         .filter(NettyTransport::isAvailable)
-        .collect(Collectors.toList());
+        .collect(Collectors.toUnmodifiableList());
 
     private final boolean available;
     private final Supplier<IoHandlerFactory> ioHandlerFactorySupplier;

@@ -3,6 +3,7 @@ package io.github.nettyplus.netty4.transports;
 import io.netty.channel.IoHandler;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.uring.IoUring;
+import java.util.Collection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -18,6 +19,8 @@ public class NettyTransportTest {
     @Test
     public void nioIsAvailable() {
         assertTrue(NettyTransport.NIO.isAvailable());
+        assertThat(NettyTransport.availableTransports())
+            .contains(NettyTransport.NIO);
     }
 
     @Test
