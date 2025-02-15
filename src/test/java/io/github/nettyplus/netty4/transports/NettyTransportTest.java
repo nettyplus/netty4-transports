@@ -3,6 +3,8 @@ package io.github.nettyplus.netty4.transports;
 import io.netty.channel.IoHandler;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.uring.IoUring;
+import io.netty.util.concurrent.ImmediateEventExecutor;
+import io.netty.util.concurrent.ThreadAwareExecutor;
 import java.util.Collection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
@@ -66,11 +68,12 @@ public class NettyTransportTest {
     @ParameterizedTest
     @EnumSource(NettyTransport.class)
     public void checkTransport(final NettyTransport transport) {
+        ThreadAwareExecutor executor = ImmediateEventExecutor.INSTANCE;
         assertNotNull(transport.getDatagramChannelClass());
         assertNotNull(transport.getServerSocketChannelClass());
         assertNotNull(transport.getSocketChannelClass());
         if (transport.isAvailable()) {
-            IoHandler handler = transport.createIoHandlerFactory().newHandler();
+            IoHandler handler = transport.createIoHandlerFactory().newHandler(executor);
             handler.prepareToDestroy();
             handler.destroy();
         }
