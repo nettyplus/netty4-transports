@@ -19,6 +19,7 @@ jobs:
         java: [ '11' ]
         os: [ 'ubuntu-latest', 'macos-latest', 'windows-latest' ]
     runs-on: ${{ matrix.os }}
+    runs-on: Java ${{ matrix.java }} ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK
