@@ -74,7 +74,7 @@ public class NettyTransportTest {
         assertNotNull(transport.getSocketChannelClass());
         if (transport.isAvailable()) {
             IoHandler handler = transport.createIoHandlerFactory().newHandler(executor);
-            handler.prepareToDestroy();
+            handler.initialize();
             handler.destroy();
         }
     }
