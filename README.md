@@ -88,7 +88,7 @@ ServerBootstrap bootstrap = new ServerBootstrap()
 |-----------|----------|--------------|-------------|
 | NIO | All | All | Good |
 | Epoll | Linux | x86_64, aarch64 | Excellent |
-| io_uring | Linux 5.1+ | x86_64, aarch64 | Excellent |
+| io_uring | Linux 5.9+ | x86_64, aarch64 | Excellent |
 | KQueue | macOS, BSD | x86_64, aarch64 | Excellent |
 
 **Note**: Native transports (Epoll, io_uring, KQueue) offer better performance than NIO but are platform-specific.
