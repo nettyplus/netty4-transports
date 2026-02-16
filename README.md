@@ -31,6 +31,8 @@ Add the following dependency to your Maven `pom.xml`:
 </dependency>
 ```
 
+**Note**: This project is currently in development. Check the [releases page](https://github.com/nettyplus/netty4-transports/releases) for the latest stable version.
+
 ## Usage
 
 ### Basic Example - Check Available Transports
